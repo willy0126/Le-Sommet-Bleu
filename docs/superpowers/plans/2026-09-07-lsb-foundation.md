@@ -20,7 +20,7 @@
 
 ---
 
-### 작업 1: Next.js 실행 기반과 검사 도구 구성
+### Task 1: Next.js 실행 기반과 검사 도구 구성
 
 **파일:**
 
@@ -211,7 +211,7 @@ git add package.json package-lock.json .gitignore next-env.d.ts next.config.ts p
 git commit -m "chore: Next.js 프로젝트 기반 구성"
 ```
 
-### 작업 2: Supabase 환경 변수와 클라이언트 경계 구성
+### Task 2: Supabase 환경 변수와 클라이언트 경계 구성
 
 **파일:**
 
@@ -365,7 +365,7 @@ git add .env.example src/lib/supabase supabase/migrations/.gitkeep
 git commit -m "feat: Supabase 클라이언트 기반 추가"
 ```
 
-### 작업 3: 정적 메인 페이지와 확장 디렉터리 구성
+### Task 3: 정적 메인 페이지와 확장 디렉터리 구성
 
 **파일:**
 
