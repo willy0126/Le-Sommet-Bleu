@@ -27,7 +27,6 @@
 - 생성: `package.json`
 - 생성: `package-lock.json` (`npm install`로 자동 생성)
 - 생성: `.gitignore`
-- 생성: `next-env.d.ts`
 - 생성: `next.config.ts`
 - 생성: `postcss.config.mjs`
 - 생성: `eslint.config.mjs`
@@ -53,7 +52,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
@@ -111,13 +110,13 @@ const config = {
 export default config;
 ```
 
-`next-env.d.ts`:
+`next-env.d.ts`는 `next typegen`이 생성하는 프레임워크 관리 파일이다. Git에서 추적하지 않으며 `.gitignore`에 추가한다.
 
 ```ts
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
-import "./.next/dev/types/routes.d.ts";
-import "./.next/dev/types/root-params.d.ts";
+import "./.next/types/routes.d.ts";
+import "./.next/types/root-params.d.ts";
 
 // NOTE: This file should not be edited
 // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
@@ -205,6 +204,7 @@ export default defineConfig([
 ```gitignore
 node_modules/
 .next/
+next-env.d.ts
 out/
 coverage/
 .env*
@@ -224,12 +224,12 @@ npm-debug.log*
 
 실행: `npm.cmd run typecheck`
 
-예상 결과: 애플리케이션 소스가 아직 없더라도 종료 코드 0.
+예상 결과: `next typegen`이 필요한 타입 산출물과 `next-env.d.ts`를 먼저 생성한 뒤, 애플리케이션 소스가 아직 없더라도 종료 코드 0.
 
 - [ ] **7단계: 작업 1 커밋**
 
 ```powershell
-git add package.json package-lock.json .gitignore next-env.d.ts next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json vitest.config.mjs
+git add package.json package-lock.json .gitignore next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json vitest.config.mjs
 git commit -m "chore: Next.js 프로젝트 기반 구성"
 ```
 
