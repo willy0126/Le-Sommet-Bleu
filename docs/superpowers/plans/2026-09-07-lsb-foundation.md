@@ -6,7 +6,7 @@
 
 **구조:** Next.js App Router 프로젝트를 `src` 아래에 구성하고 기능 코드와 공용 코드를 명확히 분리한다. Supabase는 공개 환경 변수 검사와 브라우저·서버 클라이언트 생성 경계만 제공하며, 메인 페이지는 CSS만 사용하는 정적 소개 화면으로 유지한다.
 
-**기술 스택:** Next.js 16.3.4, React 19.2.8, TypeScript 7.0.2, Tailwind CSS 4.3.3, GSAP 3.15.0, Zustand 5.0.15, React Hook Form 7.87.0, Zod 4.5.4, Supabase JS 2.115.0, Supabase SSR 0.12.6, Vitest 4.1.11, npm
+**기술 스택:** Next.js 16.3.4, React 19.2.8, TypeScript 5.9.3, Tailwind CSS 4.3.3, GSAP 3.15.0, Zustand 5.0.15, React Hook Form 7.87.0, Zod 4.5.4, Supabase JS 2.115.0, Supabase SSR 0.12.6, Vitest 4.1.11, npm
 
 **설계 문서:** `docs/superpowers/specs/2026-09-07-lsb-foundation-design.md`
 
@@ -75,7 +75,7 @@
     "eslint": "10.10.0",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "4.3.3",
-    "typescript": "7.0.2",
+    "typescript": "5.9.3",
     "vitest": "4.1.11"
   },
   "engines": {
