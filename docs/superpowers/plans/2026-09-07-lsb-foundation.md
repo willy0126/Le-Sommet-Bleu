@@ -32,7 +32,7 @@
 - 생성: `postcss.config.mjs`
 - 생성: `eslint.config.mjs`
 - 생성: `tsconfig.json`
-- 생성: `vitest.config.ts`
+- 생성: `vitest.config.mjs`
 
 **인터페이스:**
 
@@ -149,7 +149,7 @@ export default config;
 }
 ```
 
-`vitest.config.ts`:
+`vitest.config.mjs`:
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -207,7 +207,7 @@ npm-debug.log*
 - [ ] **7단계: 작업 1 커밋**
 
 ```powershell
-git add package.json package-lock.json .gitignore next-env.d.ts next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json vitest.config.ts
+git add package.json package-lock.json .gitignore next-env.d.ts next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json vitest.config.mjs
 git commit -m "chore: Next.js 프로젝트 기반 구성"
 ```
 
@@ -225,7 +225,7 @@ git commit -m "chore: Next.js 프로젝트 기반 구성"
 **인터페이스:**
 
 - 입력: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- 출력: `getSupabasePublicEnv(env?: NodeJS.ProcessEnv): SupabasePublicEnv`
+- 출력: `getSupabasePublicEnv(env?: Partial<NodeJS.ProcessEnv>): SupabasePublicEnv`
 - 출력: 브라우저용 동기 함수 `createClient()`와 서버용 비동기 함수 `createClient()`
 
 - [ ] **1단계: 환경 변수 검사 실패 테스트 작성**
@@ -275,7 +275,7 @@ export type SupabasePublicEnv = {
 };
 
 export function getSupabasePublicEnv(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Partial<NodeJS.ProcessEnv> = process.env,
 ): SupabasePublicEnv {
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
