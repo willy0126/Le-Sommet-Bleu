@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --ocean-deep: #061a25;
+  --ocean-mid: #0b3445;
+  --sea-glass: #8fc9c5;
+  --ivory: #f4f0e6;
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  --font-body: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ocean-deep);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body), sans-serif;
+}
+
+.ocean-glow {
+  background:
+    radial-gradient(circle at 78% 24%, rgb(63 143 151 / 28%), transparent 30%),
+    linear-gradient(145deg, var(--ocean-deep) 18%, var(--ocean-mid) 64%, #0d2731 100%);
+}

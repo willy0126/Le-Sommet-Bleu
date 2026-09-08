@@ -6,7 +6,7 @@
 
 **구조:** Next.js App Router 프로젝트를 `src` 아래에 구성하고 기능 코드와 공용 코드를 명확히 분리한다. Supabase는 공개 환경 변수 검사와 브라우저·서버 클라이언트 생성 경계만 제공하며, 메인 페이지는 CSS만 사용하는 정적 소개 화면으로 유지한다.
 
-**기술 스택:** Next.js 16.3.4, React 19.2.8, TypeScript 7.0.2, Tailwind CSS 4.3.3, GSAP 3.15.0, Zustand 5.0.15, React Hook Form 7.87.0, Zod 4.5.4, Supabase JS 2.115.0, Supabase SSR 0.12.6, Vitest 4.1.11, npm
+**기술 스택:** Next.js 16.3.4, React 19.2.8, TypeScript 5.9.3, Tailwind CSS 4.3.3, GSAP 3.15.0, Zustand 5.0.15, React Hook Form 7.87.0, Zod 4.5.4, Supabase JS 2.115.0, Supabase SSR 0.12.6, Vitest 4.1.11, npm
 
 **설계 문서:** `docs/superpowers/specs/2026-09-07-lsb-foundation-design.md`
 
@@ -20,19 +20,18 @@
 
 ---
 
-### 작업 1: Next.js 실행 기반과 검사 도구 구성
+### Task 1: Next.js 실행 기반과 검사 도구 구성
 
 **파일:**
 
 - 생성: `package.json`
 - 생성: `package-lock.json` (`npm install`로 자동 생성)
 - 생성: `.gitignore`
-- 생성: `next-env.d.ts`
 - 생성: `next.config.ts`
 - 생성: `postcss.config.mjs`
 - 생성: `eslint.config.mjs`
 - 생성: `tsconfig.json`
-- 생성: `vitest.config.ts`
+- 생성: `vitest.config.mjs`
 
 **인터페이스:**
 
@@ -53,7 +52,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
@@ -72,10 +71,10 @@
     "@types/node": "20.19.43",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
-    "eslint": "10.10.0",
+    "eslint": "9.39.5",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "4.3.3",
-    "typescript": "7.0.2",
+    "typescript": "5.9.3",
     "vitest": "4.1.11"
   },
   "engines": {
@@ -92,6 +91,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   reactStrictMode: true,
 };
 
@@ -110,13 +110,16 @@ const config = {
 export default config;
 ```
 
-`next-env.d.ts`:
+`next-env.d.ts`는 `next typegen`이 생성하는 프레임워크 관리 파일이다. Git에서 추적하지 않으며 `.gitignore`에 추가한다.
 
 ```ts
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
+import "./.next/types/routes.d.ts";
+import "./.next/types/root-params.d.ts";
 
-// 이 파일은 Next.js가 자동으로 관리합니다.
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
 ```
 
 - [ ] **3단계: TypeScript와 Vitest 설정 생성**
@@ -127,7 +130,11 @@ export default config;
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
@@ -139,17 +146,31 @@ export default config;
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
 ```
 
-`vitest.config.ts`:
+`vitest.config.mjs`:
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -183,6 +204,7 @@ export default defineConfig([
 ```gitignore
 node_modules/
 .next/
+next-env.d.ts
 out/
 coverage/
 .env*
@@ -202,16 +224,16 @@ npm-debug.log*
 
 실행: `npm.cmd run typecheck`
 
-예상 결과: 애플리케이션 소스가 아직 없더라도 종료 코드 0.
+예상 결과: `next typegen`이 필요한 타입 산출물과 `next-env.d.ts`를 먼저 생성한 뒤, 애플리케이션 소스가 아직 없더라도 종료 코드 0.
 
 - [ ] **7단계: 작업 1 커밋**
 
 ```powershell
-git add package.json package-lock.json .gitignore next-env.d.ts next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json vitest.config.ts
+git add package.json package-lock.json .gitignore next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json vitest.config.mjs
 git commit -m "chore: Next.js 프로젝트 기반 구성"
 ```
 
-### 작업 2: Supabase 환경 변수와 클라이언트 경계 구성
+### Task 2: Supabase 환경 변수와 클라이언트 경계 구성
 
 **파일:**
 
@@ -225,7 +247,7 @@ git commit -m "chore: Next.js 프로젝트 기반 구성"
 **인터페이스:**
 
 - 입력: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- 출력: `getSupabasePublicEnv(env?: NodeJS.ProcessEnv): SupabasePublicEnv`
+- 출력: `getSupabasePublicEnv(env?: Partial<NodeJS.ProcessEnv>): SupabasePublicEnv`
 - 출력: 브라우저용 동기 함수 `createClient()`와 서버용 비동기 함수 `createClient()`
 
 - [ ] **1단계: 환경 변수 검사 실패 테스트 작성**
@@ -275,7 +297,7 @@ export type SupabasePublicEnv = {
 };
 
 export function getSupabasePublicEnv(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Partial<NodeJS.ProcessEnv> = process.env,
 ): SupabasePublicEnv {
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -365,7 +387,7 @@ git add .env.example src/lib/supabase supabase/migrations/.gitkeep
 git commit -m "feat: Supabase 클라이언트 기반 추가"
 ```
 
-### 작업 3: 정적 메인 페이지와 확장 디렉터리 구성
+### Task 3: 정적 메인 페이지와 확장 디렉터리 구성
 
 **파일:**
 
